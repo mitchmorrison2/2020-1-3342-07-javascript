@@ -67,6 +67,19 @@ let str4 = "briefly"
 let str5 = "Offensive Word"
 
 // START
+function bowlderize() {
+  let newStr = this;
+  vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
+  for (letter in newStr) {
+    for (vowel in vowels) {
+      if (letter == vowel) {
+          letter = '*'
+          break;
+      }
+    }
+  }
+  return newStr
+}
 // END
 
 assert.equal(str1.bowlderize(), "*bc")
