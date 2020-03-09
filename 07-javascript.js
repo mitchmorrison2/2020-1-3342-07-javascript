@@ -67,15 +67,15 @@ let str4 = "briefly"
 let str5 = "Offensive Word"
 
 // START
-function bowlderize() {
-  let newStr = this;
-  vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
-  for (letter in newStr) {
-    for (vowel in vowels) {
-      if (letter == vowel) {
-          letter = '*'
-          break;
-      }
+String.prototype.bowlderize = function() {
+  let vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
+  let newStr = ''
+  for (char of this) {
+    if (vowels.indexOf(char) >= 0) {
+      newStr += '*'
+    }
+    else {
+      newStr += char
     }
   }
   return newStr
@@ -88,7 +88,6 @@ assert.equal(str3.bowlderize(), "b**f")
 assert.equal(str4.bowlderize(), "br**fly")
 assert.equal(str5.bowlderize(), "*ff*ns*v* W*rd")
 
-if (false) {
 
 ///////////////// Section 2
 //
@@ -108,6 +107,15 @@ if (false) {
 //
 
 // START
+Person = function(name, title) {
+  this.name = name
+  this.title = title
+}
+Person.prototype.fullName = function() {
+  return (this.title + " " + this.name)
+}
+
+
 // END
 
 p = new Person("Betty", "Ms")
@@ -128,6 +136,17 @@ assert.equal(p.fullName(), "Ms Betty")
 //
 
 //START
+
+class Person1 {
+  constructor(name, title) {
+    this.title = title,
+    this.name = name
+  }
+  fullName() {
+    return this.title + " " + this.name
+  }
+}
+
 // END
 
 p = new Person1("Fred", "Mr")
@@ -156,6 +175,20 @@ assert(p.hasOwnProperty("name"))
 // Penalty: -3 layout, -3 naming
 
 //START
+
+bugs = function (someFunc) {
+  let supFn = String.prototype.sup
+  String.prototype.sup = function() {
+    return `What's up, ${this}?`
+  }
+  try {
+    someFunc()
+  }
+  finally {
+    String.prototype.sup = supFn
+  }
+}
+
 //END
 
 assert.equal("doc".sup(), "<sup>doc</sup>")
@@ -206,6 +239,9 @@ assert.equal("DOC".sup(), "<sup>DOC</sup>")
 
 function myNew(constructor, ...args) {
   //START
+  var newObject = Object.create(constructor.prototype)
+  constructor.apply(newObject, args)
+  return newObject
   //END
 }
 
@@ -221,4 +257,3 @@ box = myNew(Box, 5, 7)
 assert.equal(box.w, 5)
 assert.equal(box.h, 7)
 assert.equal(box.area(), 35)
-}
